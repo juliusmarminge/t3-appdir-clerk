@@ -12,6 +12,7 @@
     "start": "next start"
   },
   "dependencies": {
+    "@clerk/nextjs": "^4.28.0",
     "@planetscale/database": "^1.11.0",
     "@t3-oss/env-nextjs": "^0.7.1",
     "@tanstack/react-query": "^4.36.1",
