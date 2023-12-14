@@ -1,3 +1,4 @@
+import { currentUser } from "@clerk/nextjs";
 import { z } from "zod";
 
 import {
@@ -27,7 +28,10 @@ export const postRouter = createTRPCRouter({
       });
     }),
 
-  getLatest: protectedProcedure.query(({ ctx }) => {
+  getLatest: protectedProcedure.query(async ({ ctx }) => {
+    const user = await currentUser();
+    console.log("Context", ctx.auth, user);
+
     return ctx.db.query.posts.findFirst({
       orderBy: (posts, { desc }) => [desc(posts.createdAt)],
     });
