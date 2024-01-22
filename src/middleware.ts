@@ -1,18 +1,21 @@
 import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
+import { NextResponse } from "next/server";
 
-const isPublicRoute = createRouteMatcher(["/", "/api/(.*)"]);
+const isPublicRoute = createRouteMatcher(["/"]);
+const isApiRoute = createRouteMatcher(["/api/(.*)"]);
 
 export default clerkMiddleware((auth, req) => {
-  const { userId, redirectToSignIn } = auth();
+  if (isApiRoute(req)) return NextResponse.next();
 
-  if (!userId && !isPublicRoute(req)) {
-    redirectToSignIn();
-  }
+  const { userId, redirectToSignIn, protect } = auth();
+  const isPublic = isPublicRoute(req);
+
+  if (!userId && !isPublic) redirectToSignIn();
+  if (!isPublic) protect();
+
+  return NextResponse.next();
 });
 
 export const config = {
-  matcher: [
-    // Omit API routes and static files
-    "/((?!api|_next/static|_next/image|favicon.ico).*)",
-  ],
+  matcher: ["/((?!.*\\..*|_next).*)", "/", "/api(.*)"],
 };
