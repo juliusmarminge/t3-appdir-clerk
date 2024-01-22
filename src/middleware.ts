@@ -1,9 +1,18 @@
-import { authMiddleware } from "@clerk/nextjs";
+import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
 
-export default authMiddleware({
-  publicRoutes: ["/", "/api/(.*)"],
+const isPublicRoute = createRouteMatcher(["/", "/api/(.*)"]);
+
+export default clerkMiddleware((auth, req) => {
+  const { userId, redirectToSignIn } = auth();
+
+  if (!userId && !isPublicRoute(req)) {
+    redirectToSignIn();
+  }
 });
 
 export const config = {
-  matcher: ["/((?!.*\\..*|_next).*)", "/", "/(api|trpc)(.*)"],
+  matcher: [
+    // Omit API routes and static files
+    "/((?!api|_next/static|_next/image|favicon.ico).*)",
+  ],
 };

@@ -27,7 +27,7 @@ export function TRPCReactProvider(props: { children: React.ReactNode }) {
           async headers() {
             const headers = new Headers();
             headers.set("x-trpc-source", "nextjs-react");
-            return Object.fromEntries(headers)
+            return headers;
           },
         }),
       ],
