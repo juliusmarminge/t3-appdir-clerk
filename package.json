@@ -39,6 +39,7 @@
     "autoprefixer": "^10.4.14",
     "drizzle-kit": "^0.20.13",
     "eslint": "^8.54.0",
+    "jiti": "^1.21.0",
     "mysql2": "^3.6.1",
     "postcss": "^8.4.31",
     "prettier": "^3.2.4",
